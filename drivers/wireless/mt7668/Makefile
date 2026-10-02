@@ -20,6 +20,17 @@ ccflags-y += -UMT6620 -UMT6628 -UMT5931 -UMT6630
 ccflags-y += -Wno-missing-prototypes
 ccflags-y += -Wno-missing-declarations
 
+# Kernels built with CONFIG_WERROR (Android GKI) turn these vendor code
+# idioms into errors: register reads that leave the value untouched after
+# a bus error (HAL_MCR_RD), redundant parentheses and comparisons, an
+# unused firmware name table. Keep them visible as warnings.
+ccflags-y += -Wno-error=sometimes-uninitialized
+ccflags-y += -Wno-error=parentheses-equality
+ccflags-y += -Wno-error=non-literal-null-conversion
+ccflags-y += -Wno-error=tautological-overlap-compare
+ccflags-y += -Wno-error=misleading-indentation
+ccflags-y += -Wno-error=unneeded-internal-declaration
+
 # The vendor code includes a few bare libc headers (e.g. <stddef.h>).
 # Since v6.12-ish the kernel no longer adds the compiler's own include
 # directory to the search path, so add it back here for this driver.
