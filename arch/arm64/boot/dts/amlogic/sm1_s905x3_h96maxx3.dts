@@ -1883,26 +1883,35 @@
 
 &ext_mdio {
 	external_phy: ethernet-phy@0 {
+		/* Realtek RTL8211F, reset on GPIOZ_15 (mainline meson-sm1-h96-max) */
 		reg = <0>;
 		max-speed = <1000>;
-		reset-assert-us = <20000>;
-		reset-deassert-us = <50000>;
+		reset-assert-us = <10000>;
+		reset-deassert-us = <80000>;
+		reset-gpios = <&gpio GPIOZ_15 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
 	};
 };
 
+/*
+ * Mainline runs the H96 Max with phy-mode "rgmii-txid" (TX delay from the
+ * PHY) and an 800 ps RX delay in the MAC. The "amlogic,meson-axg-dwmac"
+ * glue only takes 0 or 2000 ps from rx-internal-delay-ps, but mc_val and
+ * cali_val are written to PRG_ETH0/PRG_ETH1 last, so set the registers
+ * directly: mc_val is the VIM3L 0x1621 with TXDLY (bits 6:5) cleared,
+ * cali_val is CFG_RXCLK_DLY (bits 19:16) = 4 x 200 ps.
+ */
 &ethmac {
 	status = "okay";
 	pinctrl-names = "default";
 	pinctrl-0 = <&external_eth_pins>;
-	phy-mode = "rgmii";
+	phy-mode = "rgmii-txid";
 	phy-handle = <&external_phy>;
 	internal_phy = <2>;
 
-	mc_val = <0x1621>;
-	cali_val = <0x00000>;
-	rx_delay = <1>;
+	mc_val = <0x1601>;
+	cali_val = <0x40000>;
 	auto_cali_idx = <0>;
-	amlogic,tx-delay-ns = <2>;
+	amlogic,tx-delay-ns = <0>;
 };
 
 /* uart_A (serial1 -> /dev/ttyS1) is the AP6398S Bluetooth host controller */
