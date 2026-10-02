@@ -9,5 +9,7 @@ ccflags-y += $(PR_FMT_DEFINE)
 obj-$(CONFIG_AMLOGIC_WIRELESS) = $(MODULE_NAME).o
 $(MODULE_NAME)-y = main.o
 
+obj-$(CONFIG_MT7668) += mt7668/
+
 include $(COMMON_DRIVERS_DIR)/drivers/wireless/bluetooth/Makefile
 include $(COMMON_DRIVERS_DIR)/drivers/wireless/wifi/Makefile

@@ -12,4 +12,5 @@ config AMLOGIC_WIRELESS
 if AMLOGIC_WIRELESS
 source "$(COMMON_DRIVERS_DIR)/drivers/wireless/bluetooth/Kconfig"
 source "$(COMMON_DRIVERS_DIR)/drivers/wireless/wifi/Kconfig"
+source "$(COMMON_DRIVERS_DIR)/drivers/wireless/mt7668/Kconfig"
 endif
