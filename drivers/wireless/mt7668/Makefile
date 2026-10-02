@@ -48,6 +48,30 @@ ccflags-y += -I$(MT7668_SRC)/os -I$(MT7668_SRC)/os/linux/include
 ccflags-y += -I$(MT7668_SRC)/include -I$(MT7668_SRC)/include/nic -I$(MT7668_SRC)/include/mgmt -I$(MT7668_SRC)/include/chips
 ccflags-y += -I$(MT7668_SRC)/os/linux/hif/sdio/include
 
+# cfg80211 API probes. Android common kernels backport parts of newer
+# cfg80211 (e.g. android14-5.15 has link_id in the key ops but still
+# passes a net_device), so the kernel version alone cannot tell which
+# signatures apply: look at the declarations in this kernel's cfg80211.h.
+# See os/linux/include/gl_kernel_compat.h.
+MT7668_CFG80211_H := $(srctree)/include/net/cfg80211.h
+mt7668_decl = $(shell awk '/$(1)/ {p=1} p {printf "%s ", $$0} p && /;/ {exit}' $(MT7668_CFG80211_H) 2>/dev/null)
+mt7668_has = $(if $(findstring $(2),$(call mt7668_decl,$(1))),1,0)
+
+ccflags-y += -DMTK_CFG80211_KEY_OPS_WDEV=$(call mt7668_has,\(\*add_key\),wireless_dev)
+ccflags-y += -DMTK_CFG80211_STA_OPS_WDEV=$(call mt7668_has,\(\*get_station\),wireless_dev)
+ccflags-y += -DMTK_CFG80211_ROC_RX_ADDR=$(call mt7668_has,\(\*remain_on_channel\),rx_addr)
+ccflags-y += -DMTK_CFG80211_TDLS_MGMT_LINK_ID=$(call mt7668_has,\(\*tdls_mgmt\),link_id)
+ccflags-y += -DMTK_CFG80211_AP_UPDATE=$(call mt7668_has,\(\*change_beacon\),cfg80211_ap_update)
+ccflags-y += -DMTK_CFG80211_WIPHY_PARAMS_RADIO_IDX=$(call mt7668_has,\(\*set_wiphy_params\),radio_idx)
+ccflags-y += -DMTK_CFG80211_SET_TX_POWER_RADIO_IDX=$(call mt7668_has,\(\*set_tx_power\),radio_idx)
+ccflags-y += -DMTK_CFG80211_GET_TX_POWER_RADIO_IDX=$(call mt7668_has,\(\*get_tx_power\),radio_idx)
+ccflags-y += -DMTK_CFG80211_GET_TX_POWER_LINK_ID=$(call mt7668_has,\(\*get_tx_power\),link_id)
+ccflags-y += -DMTK_CFG80211_RADAR_LINK_ID=$(call mt7668_has,\(\*start_radar_detection\),link_id)
+ccflags-y += -DMTK_CFG80211_STA_EVENT_WDEV=$(call mt7668_has,void cfg80211_new_sta[^a-z_],wireless_dev)
+ccflags-y += -DMTK_CFG80211_CAC_EVENT_LINK_ID=$(call mt7668_has,void cfg80211_cac_event[^a-z_],link_id)
+ccflags-y += -DMTK_CFG80211_CH_SWITCH_LINK_ID=$(call mt7668_has,void cfg80211_ch_switch_notify[^a-z_],link_id)
+ccflags-y += -DMTK_CFG80211_CH_SWITCH_PUNCT=$(call mt7668_has,void cfg80211_ch_switch_notify[^a-z_],punct_bitmap)
+
 COMMON_DIR  := common/
 OS_DIR      := os/linux/
 HIF_DIR     := os/linux/hif/sdio/
@@ -88,7 +112,8 @@ OS_OBJS :=	$(OS_DIR)gl_init.o \
 		$(OS_DIR)gl_p2p.o \
 		$(OS_DIR)gl_p2p_cfg80211.o \
 		$(OS_DIR)gl_p2p_init.o \
-		$(OS_DIR)gl_p2p_kal.o
+		$(OS_DIR)gl_p2p_kal.o \
+		$(OS_DIR)gl_kernel_compat.o
 
 MGMT_OBJS :=	$(MGMT_DIR)ais_fsm.o \
 		$(MGMT_DIR)aaa_fsm.o \

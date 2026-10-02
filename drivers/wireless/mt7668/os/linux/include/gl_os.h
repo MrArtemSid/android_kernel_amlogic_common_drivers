@@ -241,6 +241,8 @@
 #endif
 #include <linux/time.h>
 
+#include "gl_kernel_compat.h"
+
 extern BOOLEAN fgIsBusAccessFailed;
 extern const struct ieee80211_iface_combination *p_mtk_iface_combinations_sta;
 extern const INT_32 mtk_iface_combinations_sta_num;

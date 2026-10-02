@@ -70,7 +70,7 @@
 #include <linux/ctype.h>
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
-MODULE_IMPORT_NS("VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver");
+KAL_MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
 #endif
 
 #define FILE_NAME_MAX   CFG_FW_NAME_MAX_LEN /* the maximum length of a file name */
@@ -889,10 +889,7 @@ WLAN_STATUS kalRxIndicateOnePkt(IN P_GLUE_INFO_T prGlueInfo, IN PVOID pvPkt)
 		kal_skb_reset_mac_len(prSkb);
 	}
 
-	if (!in_interrupt())
-		netif_rx(prSkb);
-	else
-		netif_rx(prSkb);
+	kal_netif_rx_any(prSkb);
 
 	return WLAN_STATUS_SUCCESS;
 }

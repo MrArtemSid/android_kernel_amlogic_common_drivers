@@ -309,15 +309,15 @@ const UINT_32 mtk_cipher_suites[5] = {
 
 static struct cfg80211_ops mtk_wlan_ops = {
 	.change_virtual_intf = mtk_cfg80211_change_iface,
-	.add_key = mtk_cfg80211_add_key,
-	.get_key = mtk_cfg80211_get_key,
-	.del_key = mtk_cfg80211_del_key,
+	.add_key = MTK_CFG80211_OP(MTK_CFG80211_KEY_OPS_WDEV, mtk_cfg80211_add_key),
+	.get_key = MTK_CFG80211_OP(MTK_CFG80211_KEY_OPS_WDEV, mtk_cfg80211_get_key),
+	.del_key = MTK_CFG80211_OP(MTK_CFG80211_KEY_OPS_WDEV, mtk_cfg80211_del_key),
 	.set_default_key = mtk_cfg80211_set_default_key,
-	.get_station = mtk_cfg80211_get_station,
+	.get_station = MTK_CFG80211_OP(MTK_CFG80211_STA_OPS_WDEV, mtk_cfg80211_get_station),
 #if CFG_SUPPORT_TDLS
-	.change_station = mtk_cfg80211_change_station,
-	.add_station = mtk_cfg80211_add_station,
-	.del_station = mtk_cfg80211_del_station,
+	.change_station = MTK_CFG80211_OP(MTK_CFG80211_STA_OPS_WDEV, mtk_cfg80211_change_station),
+	.add_station = MTK_CFG80211_OP(MTK_CFG80211_STA_OPS_WDEV, mtk_cfg80211_add_station),
+	.del_station = MTK_CFG80211_OP(MTK_CFG80211_STA_OPS_WDEV, mtk_cfg80211_del_station),
 #endif
 	.scan = mtk_cfg80211_scan,
 	.connect = mtk_cfg80211_connect,
@@ -337,7 +337,7 @@ static struct cfg80211_ops mtk_wlan_ops = {
 	.assoc = mtk_cfg80211_assoc,
 
 	/* Action Frame TX/RX */
-	.remain_on_channel = mtk_cfg80211_remain_on_channel,
+	.remain_on_channel = MTK_CFG80211_OP(MTK_CFG80211_ROC_RX_ADDR, mtk_cfg80211_remain_on_channel),
 	.cancel_remain_on_channel = mtk_cfg80211_cancel_remain_on_channel,
 	.mgmt_tx = mtk_cfg80211_mgmt_tx,
 	/* .mgmt_tx_cancel_wait        = mtk_cfg80211_mgmt_tx_cancel_wait, */
@@ -354,7 +354,7 @@ static struct cfg80211_ops mtk_wlan_ops = {
 #endif
 #if CFG_SUPPORT_TDLS
 	.tdls_oper = mtk_cfg80211_tdls_oper,
-	.tdls_mgmt = mtk_cfg80211_tdls_mgmt,
+	.tdls_mgmt = MTK_CFG80211_OP(MTK_CFG80211_TDLS_MGMT_LINK_ID, mtk_cfg80211_tdls_mgmt),
 #endif
 };
 
