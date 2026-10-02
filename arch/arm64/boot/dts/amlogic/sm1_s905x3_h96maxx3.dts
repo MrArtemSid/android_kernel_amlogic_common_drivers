@@ -1,0 +1,120 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * H96 Max X3 (Shenzhen Haochuangyi), Amlogic S905X3.
+ *
+ * Board description after mainline meson-sm1-h96-max.dts
+ * (Copyright (c) 2020 Christian Hewitt <christianshewitt@gmail.com>)
+ * and the stock DTB of the box (amlogic-dt-id "sm1_s905x3_u215").
+ */
+
+/dts-v1/;
+
+#include "sm1_s905x3_common.dtsi"
+#include "remote-h96maxx3.dtsi"
+
+/ {
+	model = "H96 Max X3";
+	amlogic-dt-id = "sm1_h96maxx3";
+	compatible = "sm1_h96maxx3";
+
+	/* 4 GiB, usable range of the S905X3 4 GiB layout */
+	memory@00000000 {
+		device_type = "memory";
+		linux,usable-memory = <0x0 0x000000 0x0 0xf5700000>;
+	};
+
+	gpioleds {
+		compatible = "gpio-leds";
+		status = "okay";
+
+		sys_led {
+			label="sys_led";
+			gpios=<&gpio_ao GPIOAO_11 GPIO_ACTIVE_HIGH>;
+			default-state ="default-on";
+		};
+	};
+
+	/*
+	 * Front panel clock: FD6551 with a 4-digit LED display (OpenVFD
+	 * display type 0x00, controller 0x06 "FD6551"), as in the openvfd
+	 * node of the stock DTB. The FD6551 is a two-wire part without STB,
+	 * wired to the I2C3 pins: DAT GPIOA_14, CLK GPIOA_15.
+	 */
+	openvfd {
+		compatible = "open,vfd";
+		dev_name = "openvfd";
+		status = "okay";
+		openvfd_gpio_clk = <&gpio GPIOA_15 GPIO_ACTIVE_HIGH>;
+		openvfd_gpio_dat = <&gpio GPIOA_14 GPIO_ACTIVE_HIGH>;
+		openvfd_chars = [00 04 03 02 01];
+		openvfd_dot_bits = [00 01 03 02 04 05 06];
+		/* type, reserved, flags, controller (little endian) */
+		openvfd_display_type = <0x06000000>;
+	};
+
+	/*
+	 * Bluetooth of the SDIO WiFi module: shutdown on GPIOX_17 as in
+	 * mainline, host wake on GPIOX_19 as in the stock bt-dev node.
+	 */
+	bt-dev {
+		compatible = "amlogic, aml-bt";
+		dev_name = "bt-dev";
+		status = "okay";
+		reset-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
+		hostwake-gpios = <&gpio GPIOX_19 GPIO_ACTIVE_HIGH>;
+	};
+};
+
+/* The stock sound card has no AV output mute GPIO */
+&{/auge_sound} {
+	/delete-property/ avout_mute-gpios;
+};
+
+&ext_mdio {
+	external_phy: ethernet-phy@0 {
+		/* Realtek RTL8211F (0x001cc916) */
+		reg = <0>;
+		max-speed = <1000>;
+
+		reset-assert-us = <10000>;
+		reset-deassert-us = <80000>;
+		reset-gpios = <&gpio GPIOZ_15 (GPIO_ACTIVE_LOW | GPIO_OPEN_DRAIN)>;
+	};
+};
+
+/*
+ * Mainline runs the RTL8211F with phy-mode "rgmii-txid" (TX delay from the
+ * PHY) and an 800 ps RX delay in the MAC. The "amlogic,meson-axg-dwmac"
+ * glue only takes 0 or 2000 ps from rx-internal-delay-ps, but mc_val and
+ * cali_val are written to PRG_ETH0/PRG_ETH1 last, so set the registers
+ * directly: mc_val is the stock 0x1621 with TXDLY (bits 6:5) cleared,
+ * cali_val is CFG_RXCLK_DLY (bits 19:16) = 4 x 200 ps. The PHY interrupt
+ * (GPIOZ_14) is left out, the PHY is polled.
+ */
+&ethmac {
+	status = "okay";
+	pinctrl-names = "default";
+	pinctrl-0 = <&external_eth_pins>;
+	phy-mode = "rgmii-txid";
+	phy-handle = <&external_phy>;
+	internal_phy = <2>;
+
+	mc_val = <0x1601>;
+	cali_val = <0x40000>;
+	amlogic,tx-delay-ns = <0>;
+};
+
+/* uart_A (serial1 -> /dev/ttyS1) is the Bluetooth host controller */
+&uart_A {
+	status = "okay";
+	uart_for_bt = <1>;
+};
+
+/* Both USB ports are type A host ports; the stock DTB runs them host only */
+&dwc2_a {
+	controller-type = <1>;
+};
+
+&usb3_phy_v2 {
+	otg = <0>;
+};
