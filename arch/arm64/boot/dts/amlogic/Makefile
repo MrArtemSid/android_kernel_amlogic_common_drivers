@@ -129,6 +129,7 @@ dtb-y += s6_s905x5_bl204_soundbar.dtb
 dtb-y += kvim1s.dtb
 dtb-y += kvim3l.dtb
 dtb-y += sm1_s905x3_a95xf3air.dtb
+dtb-y += sm1_s905x3_h96maxx3.dtb
 dtb-y += kvim3.dtb
 
 subdir-y += overlays/odroidc5
