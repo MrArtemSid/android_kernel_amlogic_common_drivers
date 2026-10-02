@@ -41,6 +41,7 @@ obj-$(CONFIG_AMLOGIC_SOC_INFO)		+= soc_info/
 obj-$(CONFIG_AMLOGIC_HOST_DRIVER)	+= host/
 obj-$(CONFIG_AMLOGIC_WIRELESS)		+= wireless/
 obj-$(CONFIG_AMLOGIC_LED)		+= led/
+obj-$(CONFIG_AMLOGIC_OPENVFD)		+= openvfd/
 obj-$(CONFIG_AMLOGIC_INPHY)		+= net/
 obj-$(CONFIG_AMLOGIC_MTD_COMMON)	+= mtd/common/
 obj-$(CONFIG_AMLOGIC_MTD_SPI_NAND)	+= mtd/spinand/

@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: GPL-2.0-only
+
+config AMLOGIC_OPENVFD
+	tristate "OpenVFD front panel display driver"
+	depends on GPIOLIB && OF && LEDS_CLASS
+	default n
+	help
+	  OpenVFD driver for the LED/VFD clock displays on the front of TV
+	  boxes (FD628, FD650, FD655, HBS658 and similar controllers). The
+	  board's DTB describes the display with an "open,vfd" node.
+
+	  The driver is always built as a module, openvfd.ko.
