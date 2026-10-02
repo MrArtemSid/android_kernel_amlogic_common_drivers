@@ -1,0 +1,45 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * IR remote of the H96 Max X3, from its stock DTB (NEC, map
+ * "amlogic-remote-4", custom code 0x7f80; the HK1/X92 remote). The stock
+ * DTB also carries the three generic Amlogic remote maps, left out here.
+ *
+ * Keycodes are the stock ones except OK: KEY_ENTER (28) there, KEY_REPLY
+ * (232) here, because Vendor_0001_Product_0001.kl of this build maps 232
+ * to DPAD_CENTER and has no entry for KEY_ENTER. The Fn key (0x48)
+ * toggles the driver's mouse mode, moved with the cursor scancodes.
+ */
+
+#include <dt-bindings/input/input.h>
+
+&custom_maps {
+	map_num = <1>;
+	map0 = <&map_0>;
+
+	map_0: map_0 {
+		mapname = "h96-remote";
+		customcode = <0x7f80>;
+		release_delay = <80>;
+		fn_key_scancode = <0x48>;
+		cursor_left_scancode = <0x37>;
+		cursor_right_scancode = <0x39>;
+		cursor_up_scancode = <0x38>;
+		cursor_down_scancode = <0x40>;
+		cursor_ok_scancode = <0x13>;
+		size = <12>;
+		keymap = <
+			REMOTE_KEY(0x81, 116)	/* KEY_POWER */
+			REMOTE_KEY(0x83, 139)	/* KEY_MENU */
+			REMOTE_KEY(0x73, 102)	/* KEY_HOME */
+			REMOTE_KEY(0x27, 158)	/* KEY_BACK */
+			REMOTE_KEY(0x38, 103)	/* KEY_UP */
+			REMOTE_KEY(0x40, 108)	/* KEY_DOWN */
+			REMOTE_KEY(0x37, 105)	/* KEY_LEFT */
+			REMOTE_KEY(0x39, 106)	/* KEY_RIGHT */
+			REMOTE_KEY(0x13, 232)	/* KEY_REPLY */
+			REMOTE_KEY(0x87, 115)	/* KEY_VOLUMEUP */
+			REMOTE_KEY(0x89, 114)	/* KEY_VOLUMEDOWN */
+			REMOTE_KEY(0x48, 464)	/* KEY_FN */
+		>;
+	};
+};
