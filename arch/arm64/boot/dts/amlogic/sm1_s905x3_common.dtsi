@@ -1,20 +1,19 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
  * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+ *
+ * Common description of the S905X3 TV boxes built on the Amlogic
+ * AC213/AC214 reference design (cf. mainline meson-sm1-ac2xx.dtsi),
+ * derived from kvim3l.dts. The board file sets the model, the memory,
+ * the IR remote, Ethernet, Bluetooth and the front panel.
  */
-
-/dts-v1/;
 
 #include "mesonsm1.dtsi"
 #include "mesonsm1_drm.dtsi"
-#include "remote-khadas-12btns.dtsi"
 #include "mesonsm1_ac200-panel.dtsi"
 #include "partition_mbox_dynamic_deadpool.dtsi"
 
 / {
-	model = "Khadas VIM3L";
-	amlogic-dt-id = "sm1_kvim3l";
-	compatible = "sm1_kvim3l";
 	interrupt-parent = <&gic>;
 	#address-cells = <2>;
 	#size-cells = <2>;
@@ -37,11 +36,6 @@
 		mmc0 = &sd_emmc_c;
 		mmc1 = &sd_emmc_b;
 		mmc2 = &sd_emmc_a;
-	};
-
-	memory@00000000 {
-		device_type = "memory";
-		linux,usable-memory = <0x0 0x000000 0x0 0x80000000>;
 	};
 
 	reserved-memory {
