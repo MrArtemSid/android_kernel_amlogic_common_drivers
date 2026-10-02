@@ -221,7 +221,7 @@
 
 		sys_led {
 			label="sys_led";
-			gpios=<&gpio_ao GPIOAO_4 GPIO_ACTIVE_HIGH>;
+			gpios=<&gpio_ao GPIOAO_11 GPIO_ACTIVE_HIGH>;
 			default-state ="default-on";
 		};
 	};
@@ -427,7 +427,7 @@
 
 	gpio_keypad{
 		compatible = "amlogic, gpio_keypad";
-		status = "okay";
+		status = "disabled";
 		scan_period = <20>;
 		key_num = <1>;
 		key_name = "power";
