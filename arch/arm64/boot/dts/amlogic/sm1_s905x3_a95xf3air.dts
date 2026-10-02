@@ -226,6 +226,25 @@
 		};
 	};
 
+	/*
+	 * Front panel clock: FD628 with a 4-digit LED display (OpenVFD
+	 * display type 0x03 "5D_7S_ABOX", controller FD628), from the A95X
+	 * F3 Air entry of arthur-liberman/vfd-configurations. The pins match
+	 * the stock cyx-vfd node (STB GPIOAO_6, CLK GPIOAO_7, DAT GPIOAO_8).
+	 */
+	openvfd {
+		compatible = "open,vfd";
+		dev_name = "openvfd";
+		status = "okay";
+		openvfd_gpio_clk = <&gpio_ao GPIOAO_7 GPIO_ACTIVE_HIGH>;
+		openvfd_gpio_dat = <&gpio_ao GPIOAO_8 GPIO_ACTIVE_HIGH>;
+		openvfd_gpio_stb = <&gpio_ao GPIOAO_6 GPIO_ACTIVE_HIGH>;
+		openvfd_chars = [04 00 01 02 03];
+		openvfd_dot_bits = [00 01 02 03 04 05 06];
+		/* type, reserved, flags, controller (little endian) */
+		openvfd_display_type = <0x00000003>;
+	};
+
 	bt-dev{
 		compatible = "amlogic, aml-bt";
 		dev_name = "bt-dev";
