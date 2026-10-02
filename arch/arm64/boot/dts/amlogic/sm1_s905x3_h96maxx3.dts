@@ -385,7 +385,7 @@
 
 	aml_cams {
 		compatible = "amlogic, cams_prober";
-		status = "okay";
+		status = "disabled";
 		pinctrl-names="default";
 		pinctrl-0=<&clk12_24_z_pins>;
 		clocks = <&clkc CLKID_24M_CLK_GATE>;
@@ -410,7 +410,7 @@
 
 	amvdec_csi {
 		compatible = "amlogic, amvdec_csi";
-		status = "okay";
+		status = "disabled";
 		csi_id = <0>;
 		reg = <0x0 0xff650000 0x0 0x00000100>,
 		      <0x0 0xffe0c000 0x0 0x00000100>,
@@ -427,7 +427,7 @@
 
 	gpio_keypad{
 		compatible = "amlogic, gpio_keypad";
-		status = "okay";
+		status = "disabled";
 		scan_period = <20>;
 		key_num = <1>;
 		key_name = "power";
@@ -438,7 +438,7 @@
 
 	adc_keypad {
 		compatible = "amlogic, adc_keypad";
-		status = "okay";
+		status = "disabled";
 		key_name = "vol-", "vol+", "enter";
 		key_num = <3>;
 		io-channels = <&saradc SARADC_CH2>;
@@ -1269,7 +1269,7 @@
 };
 
 &i2c2 {
-	status = "okay";
+	status = "disabled";
 	pinctrl-names="default";
 	pinctrl-0=<&i2c2_master_pins3>;
 	clock-frequency = <100000>;
@@ -1325,7 +1325,7 @@
 };
 
 &i2c_AO {
-	status = "okay";
+	status = "disabled";
 	pinctrl-names="default";
 	pinctrl-0=<&ao_i2c_master_pins1>;
 	clock-frequency = <100000>; /* default 100k */
