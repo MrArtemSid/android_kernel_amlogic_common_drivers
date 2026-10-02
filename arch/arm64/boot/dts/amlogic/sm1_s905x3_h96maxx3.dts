@@ -215,9 +215,13 @@
 	galcore {
 		status = "okay";
 	};
+	/*
+	 * The LED GPIO of the H96 Max X3 is not known (no stock DTB, mainline
+	 * describes no LEDs); GPIOAO_4 is the VIM3L white LED.
+	 */
 	gpioleds {
 		compatible = "gpio-leds";
-		status = "okay";
+		status = "disabled";
 
 		sys_led {
 			label="sys_led";
