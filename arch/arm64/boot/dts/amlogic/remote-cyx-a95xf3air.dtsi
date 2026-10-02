@@ -1,0 +1,121 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * IR remotes of the A95X F3 Air (CYX), from its stock DTB (NEC protocol):
+ * the A95X remote, a CS918 remote and a "pp" remote; the two factory test
+ * maps of the stock DTB are left out.
+ *
+ * Keycodes are the stock ones except OK: KEY_ENTER (28) there, KEY_REPLY
+ * (232) here, because Vendor_0001_Product_0001.kl of this build maps 232
+ * to DPAD_CENTER and has no entry for KEY_ENTER.
+ */
+
+#include <dt-bindings/input/input.h>
+
+&custom_maps {
+	map_num = <3>;
+	map0 = <&map_0>;
+	map1 = <&map_1>;
+	map2 = <&map_2>;
+
+	/* A95X F3 Air remote (CYX) */
+	map_0: map_0 {
+		mapname = "cyxtech-remote-a95x";
+		customcode = <0xdf00>;
+		release_delay = <80>;
+		size = <32>;
+		keymap = <
+			REMOTE_KEY(0x0c, 11)	/* KEY_0 */
+			REMOTE_KEY(0x54, 2)	/* KEY_1 */
+			REMOTE_KEY(0x16, 3)	/* KEY_2 */
+			REMOTE_KEY(0x15, 4)	/* KEY_3 */
+			REMOTE_KEY(0x50, 5)	/* KEY_4 */
+			REMOTE_KEY(0x12, 6)	/* KEY_5 */
+			REMOTE_KEY(0x11, 7)	/* KEY_6 */
+			REMOTE_KEY(0x4c, 8)	/* KEY_7 */
+			REMOTE_KEY(0x0e, 9)	/* KEY_8 */
+			REMOTE_KEY(0x0d, 10)	/* KEY_9 */
+			REMOTE_KEY(0x10, 14)	/* KEY_BACKSPACE */
+			REMOTE_KEY(0x1a, 103)	/* KEY_UP */
+			REMOTE_KEY(0x48, 108)	/* KEY_DOWN */
+			REMOTE_KEY(0x47, 105)	/* KEY_LEFT */
+			REMOTE_KEY(0x07, 106)	/* KEY_RIGHT */
+			REMOTE_KEY(0x06, 232)	/* KEY_REPLY */
+			REMOTE_KEY(0x4b, 122)	/* KEY_HANGEUL */
+			REMOTE_KEY(0x4f, 123)	/* KEY_HANJA */
+			REMOTE_KEY(0x1c, 116)	/* KEY_POWER */
+			REMOTE_KEY(0x42, 102)	/* KEY_HOME */
+			REMOTE_KEY(0x0a, 158)	/* KEY_BACK */
+			REMOTE_KEY(0x18, 139)	/* KEY_MENU */
+			REMOTE_KEY(0x5d, 115)	/* KEY_VOLUMEUP */
+			REMOTE_KEY(0x5c, 114)	/* KEY_VOLUMEDOWN */
+			REMOTE_KEY(0x4a, 113)	/* KEY_MUTE */
+			REMOTE_KEY(0x41, 70)	/* KEY_SCROLLLOCK */
+			REMOTE_KEY(0x01, 390)	/* KEY_AUX */
+			REMOTE_KEY(0x09, 392)	/* KEY_AUDIO */
+			REMOTE_KEY(0x5f, 394)	/* KEY_DIRECTORY */
+			REMOTE_KEY(0x5a, 396)	/* KEY_MEMO */
+			REMOTE_KEY(0x19, 397)	/* KEY_CALENDAR */
+			REMOTE_KEY(0x13, 398)	/* KEY_RED */
+		>;
+	};
+
+	/* CS918 remote */
+	map_1: map_1 {
+		mapname = "cyxtech-remote-cs918";
+		customcode = <0x4040>;
+		release_delay = <80>;
+		size = <29>;
+		keymap = <
+			REMOTE_KEY(0x00, 11)	/* KEY_0 */
+			REMOTE_KEY(0x01, 2)	/* KEY_1 */
+			REMOTE_KEY(0x02, 3)	/* KEY_2 */
+			REMOTE_KEY(0x03, 4)	/* KEY_3 */
+			REMOTE_KEY(0x04, 5)	/* KEY_4 */
+			REMOTE_KEY(0x05, 6)	/* KEY_5 */
+			REMOTE_KEY(0x06, 7)	/* KEY_6 */
+			REMOTE_KEY(0x07, 8)	/* KEY_7 */
+			REMOTE_KEY(0x08, 9)	/* KEY_8 */
+			REMOTE_KEY(0x09, 10)	/* KEY_9 */
+			REMOTE_KEY(0x0c, 14)	/* KEY_BACKSPACE */
+			REMOTE_KEY(0x0b, 103)	/* KEY_UP */
+			REMOTE_KEY(0x0e, 108)	/* KEY_DOWN */
+			REMOTE_KEY(0x10, 105)	/* KEY_LEFT */
+			REMOTE_KEY(0x11, 106)	/* KEY_RIGHT */
+			REMOTE_KEY(0x0d, 232)	/* KEY_REPLY */
+			REMOTE_KEY(0x1e, 122)	/* KEY_HANGEUL */
+			REMOTE_KEY(0x1f, 123)	/* KEY_HANJA */
+			REMOTE_KEY(0x4d, 116)	/* KEY_POWER */
+			REMOTE_KEY(0x1a, 102)	/* KEY_HOME */
+			REMOTE_KEY(0x42, 158)	/* KEY_BACK */
+			REMOTE_KEY(0x45, 139)	/* KEY_MENU */
+			REMOTE_KEY(0x15, 115)	/* KEY_VOLUMEUP */
+			REMOTE_KEY(0x1c, 114)	/* KEY_VOLUMEDOWN */
+			REMOTE_KEY(0x43, 113)	/* KEY_MUTE */
+			REMOTE_KEY(0x57, 70)	/* KEY_SCROLLLOCK */
+			REMOTE_KEY(0x5b, 395)	/* KEY_LIST */
+			REMOTE_KEY(0x54, 392)	/* KEY_AUDIO */
+			REMOTE_KEY(0x53, 393)	/* KEY_VIDEO */
+		>;
+	};
+
+	/* "pp" remote */
+	map_2: map_2 {
+		mapname = "cyxtech-remote-pp";
+		customcode = <0x7f80>;
+		release_delay = <80>;
+		size = <11>;
+		keymap = <
+			REMOTE_KEY(0x38, 103)	/* KEY_UP */
+			REMOTE_KEY(0x40, 108)	/* KEY_DOWN */
+			REMOTE_KEY(0x37, 105)	/* KEY_LEFT */
+			REMOTE_KEY(0x39, 106)	/* KEY_RIGHT */
+			REMOTE_KEY(0x13, 232)	/* KEY_REPLY */
+			REMOTE_KEY(0x81, 116)	/* KEY_POWER */
+			REMOTE_KEY(0x73, 102)	/* KEY_HOME */
+			REMOTE_KEY(0x27, 158)	/* KEY_BACK */
+			REMOTE_KEY(0x83, 139)	/* KEY_MENU */
+			REMOTE_KEY(0x87, 115)	/* KEY_VOLUMEUP */
+			REMOTE_KEY(0x89, 114)	/* KEY_VOLUMEDOWN */
+		>;
+	};
+};
