@@ -71,6 +71,10 @@
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 15, 0))
 KAL_MODULE_IMPORT_NS(VFS_internal_I_am_really_a_filesystem_and_am_NOT_a_driver);
+/* Android common kernels export filp_open(), kernel_read() etc. here. */
+#if IS_ENABLED(CONFIG_ANDROID) && (LINUX_VERSION_CODE < KERNEL_VERSION(6, 13, 0))
+MODULE_IMPORT_NS(ANDROID_GKI_VFS_EXPORT_ONLY);
+#endif
 #endif
 
 #define FILE_NAME_MAX   CFG_FW_NAME_MAX_LEN /* the maximum length of a file name */
