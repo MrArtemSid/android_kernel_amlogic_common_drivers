@@ -222,12 +222,10 @@
 
 	/*
 	 * Front panel clock: FD6551 with a 4-digit LED display (OpenVFD
-	 * display type 0x00, controller 0x06 "FD6551"), from the H96 Max X3
-	 * entry of arthur-liberman/vfd-configurations. The FD6551 is a
-	 * two-wire part without STB, wired to the I2C3 pins: DAT GPIOA_14,
-	 * CLK GPIOA_15. The conf file gives them as raw offsets 63/64 of the
-	 * mainline periphs bank; this tree numbers that bank from GPIOV_0,
-	 * hence the pin names here.
+	 * display type 0x00, controller 0x06 "FD6551"), as in the openvfd
+	 * node of the stock DTB and the H96 Max X3 entry of
+	 * arthur-liberman/vfd-configurations. The FD6551 is a two-wire part
+	 * without STB, wired to the I2C3 pins: DAT GPIOA_14, CLK GPIOA_15.
 	 */
 	openvfd {
 		compatible = "open,vfd";
