@@ -42,9 +42,11 @@ ccflags-y += -DCFG_ENABLE_GTK_FRAME_FILTER=0
 ccflags-y += -DCFG_MET_PACKET_TRACE_SUPPORT=1
 ccflags-y += -DCFG_MET_TAG_SUPPORT=0
 
-ccflags-y += -I$(src)/os -I$(src)/os/linux/include
-ccflags-y += -I$(src)/include -I$(src)/include/nic -I$(src)/include/mgmt -I$(src)/include/chips
-ccflags-y += -I$(src)/os/linux/hif/sdio/include
+# $(src) is absolute since v6.10; before that it is relative to $(srctree).
+MT7668_SRC := $(if $(filter /%,$(src)),$(src),$(srctree)/$(src))
+ccflags-y += -I$(MT7668_SRC)/os -I$(MT7668_SRC)/os/linux/include
+ccflags-y += -I$(MT7668_SRC)/include -I$(MT7668_SRC)/include/nic -I$(MT7668_SRC)/include/mgmt -I$(MT7668_SRC)/include/chips
+ccflags-y += -I$(MT7668_SRC)/os/linux/hif/sdio/include
 
 COMMON_DIR  := common/
 OS_DIR      := os/linux/
