@@ -7,7 +7,7 @@
 
 #include "mesonsm1.dtsi"
 #include "mesonsm1_drm.dtsi"
-#include "remote-khadas-12btns.dtsi"
+#include "remote-cyx-a95xf3air.dtsi"
 #include "mesonsm1_ac200-panel.dtsi"
 #include "partition_mbox_dynamic_deadpool.dtsi"
 
