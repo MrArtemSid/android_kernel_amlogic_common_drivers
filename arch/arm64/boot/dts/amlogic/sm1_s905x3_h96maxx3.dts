@@ -7,8 +7,7 @@
 
 #include "mesonsm1.dtsi"
 #include "mesonsm1_drm.dtsi"
-/* H96 Max X3 remotes: 0xdf00 (map_0) and 0x7f80 "pp"/HK1 (map_2) */
-#include "remote-cyx-a95xf3air.dtsi"
+#include "remote-h96maxx3.dtsi"
 #include "partition_mbox_dynamic_deadpool.dtsi"
 
 / {
