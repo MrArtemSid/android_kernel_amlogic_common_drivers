@@ -7,9 +7,6 @@ CONFIG_AMLOGIC_SND_SOC_ES8316=m
 # child (expander line 5), which on 4.9 needed a khadas-redled driver.
 CONFIG_GPIO_PCA953X=y
 
-# HYM8563 RTC on i2c_AO@0x51.
-CONFIG_RTC_DRV_HYM8563=m
-
 # KXTJ3 accelerometer on i2c_AO@0x0e, via the sensor-dev framework imported
 # from the vim4-a14 BSP. All three are bool/tristate default y in their
 # Kconfig, listed here so the dependency is explicit rather than implicit.
