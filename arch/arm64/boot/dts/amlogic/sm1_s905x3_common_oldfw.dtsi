@@ -1,0 +1,53 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * S905X3 boxes that keep their stock Amlogic bootloader, with BL31
+ * v1.3 4fc40b1 (May 2019), e.g. because secure boot locks it in.
+ * sm1_s905x3_common.dtsi is written for the newer VIM3L firmware; this
+ * file adapts it to the old one.
+ */
+
+#include "sm1_s905x3_common.dtsi"
+
+/*
+ * The old BL31 passes the PSCI CPU_ON target to the SCP as is, taking the
+ * core from bits [3:0] and the cluster from [11:8], so the
+ * 0x100/0x200/0x300 MPIDRs of mesonsm1.dtsi never power the cores on.
+ * Use the core number in Aff0 like the stock 4.9 tree, which the newer
+ * VIM3L BL31 accepts as well.
+ *
+ * Entering cpu-sleep-0 with the old BL31 hangs the box, so keep the cores
+ * in WFI.
+ *
+ * The CPU OPP tables 1-3 are picked by the eFuse DVFS index of VIM3L
+ * silicon; use cpu_opp_table0 only.
+ */
+&CPU0 {
+	/delete-property/ cpu-idle-states;
+	/delete-property/ multi_tables_available;
+	operating-points-v2 = <&cpu_opp_table0>;
+};
+
+&CPU1 {
+	reg = <0x0 0x1>;
+	/delete-property/ cpu-idle-states;
+	/delete-property/ multi_tables_available;
+	operating-points-v2 = <&cpu_opp_table0>;
+};
+
+&CPU2 {
+	reg = <0x0 0x2>;
+	/delete-property/ cpu-idle-states;
+	/delete-property/ multi_tables_available;
+	operating-points-v2 = <&cpu_opp_table0>;
+};
+
+&CPU3 {
+	reg = <0x0 0x3>;
+	/delete-property/ cpu-idle-states;
+	/delete-property/ multi_tables_available;
+	operating-points-v2 = <&cpu_opp_table0>;
+};
+
+/delete-node/ &cpu_opp_table1;
+/delete-node/ &cpu_opp_table2;
+/delete-node/ &cpu_opp_table3;
