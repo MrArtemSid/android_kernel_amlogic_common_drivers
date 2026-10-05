@@ -9,7 +9,7 @@
 
 /dts-v1/;
 
-#include "sm1_s905x3_common.dtsi"
+#include "sm1_s905x3_common_oldfw.dtsi"
 #include "remote-cyx-a95xf3air.dtsi"
 
 / {
