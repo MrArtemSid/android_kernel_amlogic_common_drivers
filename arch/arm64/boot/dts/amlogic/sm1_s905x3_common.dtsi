@@ -77,16 +77,16 @@
 			alignment = <0x0 0x400000>;
 			alloc-ranges = <0x0 0x05000000 0x0 0x400000>;
 		};
-		/* Static reg, not size+alloc-ranges: linux,vdin0_cma takes the top
-		 * 64M (0x7c000000-0x80000000) and would otherwise swallow the
-		 * u-boot logo framebuffer at 0x7f800000 (cmdline logo=osd0,loaded,
-		 * 0x7f800000), giving "failed to allocate memory for node
-		 * 'linux,meson-fb'".
+		/* Must match where u-boot drew the logo (cmdline logo=osd0,loaded,
+		 * 0x3d800000): meson drm ignores that address and scans out from
+		 * this region, so on a mismatch the screen stays black from drm
+		 * probe until surfaceflinger's first commit. Static reg, not
+		 * size+alloc-ranges, so no top-down CMA pool can take it first.
 		 */
 		logo_reserved:linux,meson-fb {
 			compatible = "shared-dma-pool";
 			reusable;
-			reg = <0x0 0x7f800000 0x0 0x800000>;
+			reg = <0x0 0x3d800000 0x0 0x800000>;
 		};
 		/* Legacy ion heaps are unused: gralloc's dma_buf_heaps allocator
 		 * takes heap-fb/heap-gfx and only falls back to ion-fb/ion-dev when
@@ -1030,7 +1030,7 @@
 	status = "disabled";
 	display_size_default = <1920 1080 1920 2160 32>;
 	mem_size = <0x00800000 0x1980000 0x100000 0x100000 0x800000>;
-	logo_addr = "0x7f800000";
+	logo_addr = "0x3d800000";
 	mem_alloc = <0>;
 	pxp_mode = <0>; /** 0:normal mode 1:pxp mode */
 };
@@ -1041,7 +1041,7 @@
 
 &drm_vpu {
 	status = "okay";
-	logo_addr = "0x7f800000";
+	logo_addr = "0x3d800000";
 };
 
 &pwm_AO_cd {
