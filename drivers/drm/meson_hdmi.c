@@ -1954,6 +1954,17 @@ void meson_hdmitx_encoder_atomic_enable(struct drm_encoder *encoder,
 	}
 
 	if (meson_crtc_state->seamless) {
+		struct drm_crtc_state *old_crtc_state =
+			drm_atomic_get_old_crtc_state(state, encoder->crtc);
+
+		/* The frame rate hint is only for qms/allm switches. It is
+		 * not set on hdmitx20, and the logo handover keeps no vrr.
+		 */
+		if (!am_hdmi_info.hdmitx_dev->set_vframe_rate_hint ||
+		    (!meson_crtc_state->base.vrr_enabled &&
+		     (!old_crtc_state || !old_crtc_state->vrr_enabled)))
+			return;
+
 		dst_vrefresh = meson_crtc_state->base.vrr_enabled ? mode_vrefresh : 0;
 		DRM_INFO("%s, set frame rate: %d\n", __func__, dst_vrefresh);
 		am_hdmi_info.hdmitx_dev->set_vframe_rate_hint(dst_vrefresh * 100, NULL);
@@ -2020,6 +2031,58 @@ void meson_hdmitx_encoder_atomic_disable(struct drm_encoder *encoder,
 	hdmitx_hw_set_phy(hw_comm, 0);
 	meson_hdmitx_stop_hdcp();
 	msleep(100);
+}
+
+/*
+ * The first commit after the u-boot logo (logo_show_done drops
+ * uboot_mode_init) takes the full modeset path even when it asks for the
+ * output u-boot already set up: hdmitx PHY off, then mode setting, and the
+ * sink loses sync for a second or two. Report whether nothing that the
+ * hdmitx would program changes, so that the commit can keep the output
+ * running like a seamless qms switch.
+ */
+static bool meson_hdmitx_logo_handover_unchanged(struct drm_crtc_state *crtc_state,
+						 struct drm_connector_state *conn_state)
+{
+	struct drm_atomic_state *state = conn_state->state;
+	struct drm_crtc_state *old_crtc_state =
+		drm_atomic_get_old_crtc_state(state, crtc_state->crtc);
+	struct drm_connector_state *old_conn_state =
+		drm_atomic_get_old_connector_state(state, conn_state->connector);
+	struct am_meson_crtc_state *meson_crtc_state =
+		to_am_meson_crtc_state(crtc_state);
+	struct am_hdmitx_connector_state *new_hs =
+		to_am_hdmitx_connector_state(conn_state);
+	struct am_hdmitx_connector_state *old_hs;
+	struct hdmi_format_para *new_para, *old_para;
+
+	if (!old_crtc_state || !old_conn_state)
+		return false;
+
+	if (!to_am_meson_crtc_state(old_crtc_state)->uboot_mode_init ||
+	    meson_crtc_state->uboot_mode_init)
+		return false;
+
+	if (!am_hdmi_info.hdmitx_on ||
+	    !old_crtc_state->active || !crtc_state->active ||
+	    old_crtc_state->vrr_enabled || crtc_state->vrr_enabled ||
+	    meson_crtc_state->attr_changed || meson_crtc_state->brr_update)
+		return false;
+
+	if (!drm_mode_equal(&old_crtc_state->adjusted_mode,
+			    &crtc_state->adjusted_mode))
+		return false;
+
+	old_hs = to_am_hdmitx_connector_state(old_conn_state);
+	new_para = &new_hs->hcs.para;
+	old_para = &old_hs->hcs.para;
+
+	return new_para->vic == old_para->vic &&
+	       new_para->cs == old_para->cs &&
+	       new_para->cd == old_para->cd &&
+	       new_para->cr == old_para->cr &&
+	       new_para->frac_mode == old_para->frac_mode &&
+	       new_hs->hdr_priority == old_hs->hdr_priority;
 }
 
 static int meson_hdmitx_encoder_atomic_check(struct drm_encoder *encoder,
@@ -2113,6 +2176,13 @@ static int meson_hdmitx_encoder_atomic_check(struct drm_encoder *encoder,
 
 	DRM_DEBUG("vic: %d, cs: %d, cd: %d\n", hdmitx_state->hcs.para.vic,
 		 hdmitx_state->hcs.para.cs, hdmitx_state->hcs.para.cd);
+
+	if (!meson_crtc_state->seamless &&
+	    meson_hdmitx_logo_handover_unchanged(crtc_state, conn_state)) {
+		DRM_INFO("%s: keep uboot output [%s-%s]\n",
+			 __func__, modename, attr_str);
+		meson_crtc_state->seamless = true;
+	}
 
 	return 0;
 }
