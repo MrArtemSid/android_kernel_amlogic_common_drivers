@@ -70,10 +70,15 @@
 	phy-mode = "rmii";
 };
 
-/* uart_A (serial1 -> /dev/ttyS1) is the Bluetooth host controller */
-&uart_A {
-	status = "okay";
-	uart_for_bt = <1>;
+/* MT7668RSN SDIO function 1 is Wi-Fi; function 2 is handled by btmtksdio. */
+&sd_emmc_a {
+	#address-cells = <1>;
+	#size-cells = <0>;
+
+	mt7668: wifi@1 {
+		compatible = "mediatek,mt7668";
+		reg = <1>;
+	};
 };
 
 /* Both USB ports are type A host ports; the stock DTB runs them host only */
