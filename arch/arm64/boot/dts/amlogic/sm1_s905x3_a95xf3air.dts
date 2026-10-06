@@ -74,6 +74,10 @@
 &sd_emmc_a {
 	#address-cells = <1>;
 	#size-cells = <0>;
+	/* The stock DTB caps the SDIO bus at 100 MHz (SDR104 runs at 200) */
+	max-frequency = <100000000>;
+	/* Old-style property, meson-gx-mmc only reads ocr_avail */
+	/delete-property/ cr_avail;
 
 	mt7668: wifi@1 {
 		compatible = "mediatek,mt7668";
