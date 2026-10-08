@@ -49,8 +49,12 @@
 		openvfd_gpio_stb = <&gpio_ao GPIOAO_6 GPIO_ACTIVE_HIGH>;
 		openvfd_chars = [04 00 01 02 03];
 		openvfd_dot_bits = [00 01 02 03 04 05 06];
-		/* type, reserved, flags, controller (little endian) */
-		openvfd_display_type = <0x00000003>;
+		/*
+		 * type, reserved, flags, controller (little endian): ABOX, FD628.
+		 * Flag 0x40 drops the bit-bang clock to 20 kHz; at the default
+		 * 100 kHz the display stays dark on this board.
+		 */
+		openvfd_display_type = <0x00400003>;
 	};
 
 	/* Bluetooth of the SDIO WiFi module, as in the stock bt-dev node */
