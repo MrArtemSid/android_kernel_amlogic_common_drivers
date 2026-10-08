@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: (GPL-2.0+ OR MIT)
 /*
  * IR remotes of the A95X F3 Air (CYX), from its stock DTB (NEC protocol):
- * the A95X remote, a CS918 remote and a "pp" remote; the two factory test
- * maps of the stock DTB are left out.
+ * the A95X remote, a CS918 remote and a "pp" remote, with the stock
+ * keymaps; the two factory test maps of the stock DTB are left out.
  *
- * Keycodes are the stock ones except OK: KEY_ENTER (28) there, KEY_REPLY
- * (232) here, because Vendor_0001_Product_0001.kl of this build maps 232
- * to DPAD_CENTER and has no entry for KEY_ENTER.
+ * Like on the stock firmware, remotecfg loads remote-0x*.tab over these
+ * maps at boot; the tables set the mouse mode keys.
  */
 
 #include <dt-bindings/input/input.h>
@@ -39,7 +38,7 @@
 			REMOTE_KEY(0x48, 108)	/* KEY_DOWN */
 			REMOTE_KEY(0x47, 105)	/* KEY_LEFT */
 			REMOTE_KEY(0x07, 106)	/* KEY_RIGHT */
-			REMOTE_KEY(0x06, 232)	/* KEY_REPLY */
+			REMOTE_KEY(0x06, 28)	/* KEY_ENTER */
 			REMOTE_KEY(0x4b, 122)	/* KEY_HANGEUL */
 			REMOTE_KEY(0x4f, 123)	/* KEY_HANJA */
 			REMOTE_KEY(0x1c, 116)	/* KEY_POWER */
@@ -81,7 +80,7 @@
 			REMOTE_KEY(0x0e, 108)	/* KEY_DOWN */
 			REMOTE_KEY(0x10, 105)	/* KEY_LEFT */
 			REMOTE_KEY(0x11, 106)	/* KEY_RIGHT */
-			REMOTE_KEY(0x0d, 232)	/* KEY_REPLY */
+			REMOTE_KEY(0x0d, 28)	/* KEY_ENTER */
 			REMOTE_KEY(0x1e, 122)	/* KEY_HANGEUL */
 			REMOTE_KEY(0x1f, 123)	/* KEY_HANJA */
 			REMOTE_KEY(0x4d, 116)	/* KEY_POWER */
@@ -109,7 +108,7 @@
 			REMOTE_KEY(0x40, 108)	/* KEY_DOWN */
 			REMOTE_KEY(0x37, 105)	/* KEY_LEFT */
 			REMOTE_KEY(0x39, 106)	/* KEY_RIGHT */
-			REMOTE_KEY(0x13, 232)	/* KEY_REPLY */
+			REMOTE_KEY(0x13, 28)	/* KEY_ENTER */
 			REMOTE_KEY(0x81, 116)	/* KEY_POWER */
 			REMOTE_KEY(0x73, 102)	/* KEY_HOME */
 			REMOTE_KEY(0x27, 158)	/* KEY_BACK */
