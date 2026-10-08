@@ -168,6 +168,18 @@ void meson_ir_input_configure(struct input_dev *input_device,
 	for (i = 0; i < ir_map->map_size; i++)
 		input_set_capability(input_device, EV_KEY,
 				     ir_map->codemap[i].map.keycode);
+
+	/*
+	 * Userspace reads the capabilities once, when the device appears,
+	 * so the mouse mode axes and buttons must be there before
+	 * registration rather than set on the first fn key press.
+	 */
+	input_set_capability(input_device, EV_REL, REL_X);
+	input_set_capability(input_device, EV_REL, REL_Y);
+	input_set_capability(input_device, EV_REL, REL_WHEEL);
+	for (i = BTN_MOUSE; i < BTN_SIDE; i++)
+		input_set_capability(input_device, EV_KEY, i);
+
 	meson_ir_common_input_set_capability(input_device);
 }
 EXPORT_SYMBOL(meson_ir_input_configure);
