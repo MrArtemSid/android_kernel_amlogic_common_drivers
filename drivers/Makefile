@@ -6,6 +6,7 @@ obj-y					+= debug/
 obj-$(CONFIG_AMLOGIC_MEMORY_DEBUG)	+= memory_debug/
 obj-$(CONFIG_AMLOGIC_SECMON)		+= secmon/
 obj-y					+= clk/
+obj-$(CONFIG_AMLOGIC_MESON_BC_TIMER)	+= clocksource/
 obj-$(CONFIG_AMLOGIC_GPIO)		+= gpio/
 obj-$(CONFIG_MAILBOX)			+= mailbox/
 obj-$(CONFIG_AMLOGIC_PWM)		+= pwm/

@@ -1,0 +1,12 @@
+# SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+
+config AMLOGIC_MESON_BC_TIMER
+	tristate "Amlogic Meson broadcast timer"
+	depends on OF && GENERIC_CLOCKEVENTS
+	help
+	  Say Y here to use an EE timer of Amlogic Meson SoCs as the
+	  broadcast clock event device, which keeps running while the
+	  cores are powered down in an idle state that stops their
+	  local timers.
+	  To compile this driver as a module, choose M here: the
+	  module will be called amlogic-bc-timer.
