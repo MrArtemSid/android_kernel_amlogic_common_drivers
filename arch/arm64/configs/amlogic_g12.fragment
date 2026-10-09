@@ -24,3 +24,9 @@ CONFIG_AMLOGIC_DTS_PARTITION=y
 ## for that; the GKI defconfig only enables RD_GZIP and RD_LZ4, so without this
 ## the xz initramfs is unpackable and init never starts.
 CONFIG_RD_XZ=y
+
+## Timer F (timer_bc) as the broadcast clock event device, so that the cores can
+## stop their local timers in cpu-sleep-0. Built in, as the built-in
+## cpuidle-psci lets the cores enter it long before first stage init could load
+## a module, in recovery too. Without an enabled timer_bc node it does nothing.
+CONFIG_AMLOGIC_MESON_BC_TIMER=y

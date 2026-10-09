@@ -15,37 +15,38 @@
  * Use the core number in Aff0 like the stock 4.9 tree, which the newer
  * VIM3L BL31 accepts as well.
  *
- * Entering cpu-sleep-0 with the old BL31 hangs the box, so keep the cores
- * in WFI.
- *
  * The CPU OPP tables 1-3 are picked by the eFuse DVFS index of VIM3L
  * silicon; use cpu_opp_table0 only.
  */
 &CPU0 {
-	/delete-property/ cpu-idle-states;
 	/delete-property/ multi_tables_available;
 	operating-points-v2 = <&cpu_opp_table0>;
 };
 
 &CPU1 {
 	reg = <0x0 0x1>;
-	/delete-property/ cpu-idle-states;
 	/delete-property/ multi_tables_available;
 	operating-points-v2 = <&cpu_opp_table0>;
 };
 
 &CPU2 {
 	reg = <0x0 0x2>;
-	/delete-property/ cpu-idle-states;
 	/delete-property/ multi_tables_available;
 	operating-points-v2 = <&cpu_opp_table0>;
 };
 
 &CPU3 {
 	reg = <0x0 0x3>;
-	/delete-property/ cpu-idle-states;
 	/delete-property/ multi_tables_available;
 	operating-points-v2 = <&cpu_opp_table0>;
+};
+
+/*
+ * Entering cpu-sleep-0 with the old BL31 hung the box while bc_hrtimer was
+ * the broadcast clock event device; run Timer F as that instead.
+ */
+&{/timer_bc} {
+	status = "okay";
 };
 
 /delete-node/ &cpu_opp_table1;
