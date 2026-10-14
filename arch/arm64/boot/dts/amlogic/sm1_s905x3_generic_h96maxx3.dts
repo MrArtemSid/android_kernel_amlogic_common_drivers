@@ -19,6 +19,8 @@
  * board-specific settings from the DTB as well.
  */
 &{/firmware/android} {
+	/* Wi-Fi and Bluetooth drivers to load: brcmfmac, hci_uart (hci_bcm) */
+	wifi_driver = "brcmfmac";
 	/* vendor.wifi_name: picks p2p-dev-wlan0 as the Wi-Fi Direct interface */
 	wifi_name = "bcm";
 };

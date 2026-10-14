@@ -14,6 +14,8 @@
  * board-specific settings from the DTB as well.
  */
 &{/firmware/android} {
+	/* Wi-Fi and Bluetooth drivers to load: wlan_mt76x8_sdio, btmtksdio */
+	wifi_driver = "mt7668";
 	/* vendor.wifi_name: picks p2p0 as the Wi-Fi Direct interface */
 	wifi_name = "mtk";
 };
