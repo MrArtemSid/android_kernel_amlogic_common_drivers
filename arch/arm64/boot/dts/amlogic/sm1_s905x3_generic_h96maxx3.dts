@@ -1,0 +1,39 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * H96 Max X3 in the generic S905X3 build, which runs one kernel and one
+ * set of modules on every box and differs only in the DTB.
+ *
+ * The box keeps its stock bootloader there (mainline U-Boot is
+ * chainloaded from it), so adapt the board file to the stock BL31.
+ *
+ * Wi-Fi and Bluetooth: Ampak Broadcom module (BCM4354/BCM4356 family) with
+ * the mainline drivers: brcmfmac on SDIO, which needs no DT node, and
+ * hci_bcm on uart_A, described below in place of the Amlogic bt-dev.
+ */
+
+#include "sm1_s905x3_h96maxx3.dts"
+#include "sm1_s905x3_oldbl31.dtsi"
+
+/*
+ * Android init imports these as ro.boot.<name>, so userspace learns the
+ * board-specific settings from the DTB as well.
+ */
+&{/firmware/android} {
+	/* vendor.wifi_name: picks p2p-dev-wlan0 as the Wi-Fi Direct interface */
+	wifi_name = "bcm";
+};
+
+/* hci_bcm drives BT_REG_ON (GPIOX_17) itself. */
+&{/bt-dev} {
+	status = "disabled";
+};
+
+&uart_A {
+	uart-has-rtscts;
+
+	bluetooth {
+		compatible = "brcm,bcm43540-bt";
+		shutdown-gpios = <&gpio GPIOX_17 GPIO_ACTIVE_HIGH>;
+		max-speed = <2000000>;
+	};
+};

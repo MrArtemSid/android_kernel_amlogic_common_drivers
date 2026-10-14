@@ -129,6 +129,8 @@ dtb-y += kvim1s.dtb
 dtb-y += kvim3l.dtb
 dtb-y += sm1_s905x3_a95xf3air.dtb
 dtb-y += sm1_s905x3_h96maxx3.dtb
+dtb-y += sm1_s905x3_generic_a95xf3air.dtb
+dtb-y += sm1_s905x3_generic_h96maxx3.dtb
 dtb-y += kvim3.dtb
 
 subdir-y += overlays/odroidc5

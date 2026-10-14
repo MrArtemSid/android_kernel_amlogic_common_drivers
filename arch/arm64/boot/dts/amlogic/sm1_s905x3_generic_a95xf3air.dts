@@ -1,0 +1,19 @@
+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
+/*
+ * A95X F3 Air in the generic S905X3 build, which runs one kernel and one
+ * set of modules on every box and differs only in the DTB.
+ *
+ * Wi-Fi and Bluetooth: MediaTek MT7668RSN on SDIO (wlan_mt76x8_sdio and
+ * btmtksdio from vendor/mainline-stack), as in the board file.
+ */
+
+#include "sm1_s905x3_a95xf3air.dts"
+
+/*
+ * Android init imports these as ro.boot.<name>, so userspace learns the
+ * board-specific settings from the DTB as well.
+ */
+&{/firmware/android} {
+	/* vendor.wifi_name: picks p2p0 as the Wi-Fi Direct interface */
+	wifi_name = "mtk";
+};
